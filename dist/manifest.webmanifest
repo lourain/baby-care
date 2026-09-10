@@ -1,0 +1,10 @@
+{
+  "name": "宝宝时间线 · 0-3岁育儿助手",
+  "short_name": "宝宝时间线",
+  "description": "新手爸妈的 0-3 岁育儿时间线：疫苗、健康、政策福利、成长记录",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fff7ed",
+  "theme_color": "#f97316",
+  "icons": []
+}
