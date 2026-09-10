@@ -1,4 +1,9 @@
 name: Vite React Build & Deploy
+
+# 全局权限声明，给写入仓库权限
+permissions:
+  contents: write
+  
 on:
   push:
     branches: [ main ]
