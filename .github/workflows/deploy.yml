@@ -10,6 +10,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: github-pages # 必须加上！
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
