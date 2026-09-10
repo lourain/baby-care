@@ -20,8 +20,7 @@ jobs:
 
       - name: Build
         run: npm run build
-
-      # 在 npm run build 之后，deploy之前插入
+        
       - name: Fix SPA refresh 404
         run: cp dist/index.html dist/404.html
 
