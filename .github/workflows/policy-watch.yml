@@ -1,0 +1,56 @@
+name: 政策来源变更监测
+
+# 每周一 01:00 UTC（北京时间 09:00）抓取政策来源原文并与快照比对。
+# 有变化时开 Issue，不会自动改动数据 —— 判断与改写始终由人来做。
+on:
+  schedule:
+    - cron: '0 1 * * 1'
+  workflow_dispatch:
+    inputs:
+      reset:
+        description: 忽略已有基线，全量重抓（只记录快照，不报警）
+        type: boolean
+        default: false
+
+permissions:
+  contents: write # 回写 scripts/policy-snapshots.json
+  issues: write # 创建 / 评论 Issue
+
+concurrency:
+  group: policy-watch
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 抓取来源并比对
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # 以下三项可选。配置 POLICY_LLM_API_KEY 后，Issue 里会附带 AI 改写建议。
+          # POLICY_LLM_BASE_URL / POLICY_LLM_MODEL 未设置时默认 DeepSeek，任何
+          # OpenAI 兼容接口都可以（OpenAI、通义、Kimi 等，通过 Repository variables 覆盖）。
+          POLICY_LLM_API_KEY: ${{ secrets.POLICY_LLM_API_KEY }}
+          POLICY_LLM_BASE_URL: ${{ vars.POLICY_LLM_BASE_URL }}
+          POLICY_LLM_MODEL: ${{ vars.POLICY_LLM_MODEL }}
+        run: node scripts/watch-policies.mjs ${{ inputs.reset && '--reset' || '' }}
+
+      - name: 回写快照
+        run: |
+          if [ -z "$(git status --porcelain scripts/policy-snapshots.json)" ]; then
+            echo "快照无变化，跳过提交"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/policy-snapshots.json
+          git commit -m "chore(policy-watch): 更新政策来源快照 [skip ci]"
+          git push
