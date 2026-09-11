@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AGE_BANDS } from '../data/bands'
-import { POLICIES } from '../data/policies'
 import { useApp } from '../store'
 import { ageDetail, ageInMonths, addMonths, daysUntil, monthsToBand } from '../lib/age'
 import PeriodSwitcher from '../components/PeriodSwitcher'
@@ -9,7 +8,7 @@ import PeriodModule from '../components/PeriodModule'
 
 // 首页：按宝宝当前月龄定位周期，一次只展示一个周期模块，可左右切换
 export default function Timeline() {
-  const { child } = useApp()
+  const { child, policies } = useApp()
 
   const nowMonth = child ? ageInMonths(child.birthDate) : 0
   const currentIndex = Math.max(
@@ -34,7 +33,7 @@ export default function Timeline() {
 
   // 限时待办：最近一项未过期的政策截止
   const urgentDays =
-    POLICIES.filter(
+    policies.filter(
       (p) =>
         p.deadlineMonthsFromBirth !== null &&
         p.city !== '其他' &&

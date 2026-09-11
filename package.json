@@ -4,9 +4,13 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "sync:content": "node scripts/sync-content.mjs",
+    "predev": "npm run sync:content",
     "dev": "vite",
+    "prebuild": "npm run sync:content",
     "build": "tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "watch:policies": "node scripts/watch-policies.mjs"
   },
   "dependencies": {
     "echarts": "^5.5.1",

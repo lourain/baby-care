@@ -1,5 +1,4 @@
 import { useMemo, useState, type ReactNode } from 'react'
-import { POLICIES } from '../data/policies'
 import { useApp } from '../store'
 import { addMonths, daysUntil } from '../lib/age'
 import type { PolicyDef } from '../types'
@@ -122,25 +121,33 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
 }
 
 export default function Policy() {
-  const { child, todos } = useApp()
+  const { child, todos, policies } = useApp()
   const [active, setActive] = useState<PolicyDef | null>(null)
   const [cat, setCat] = useState<string>('all')
-  if (!child) return null
 
-  const available = POLICIES.filter((p) => p.city === 'ALL' || p.city === child.city)
+  // 注意：hooks 必须在任何提前 return 之前调用，否则 child 从 null 变为有值时
+  // 会触发 "Rendered fewer hooks than expected"
+  const available = useMemo(
+    () => (child ? policies.filter((p) => p.city === 'ALL' || p.city === child.city) : []),
+    [policies, child],
+  )
 
   const todoItems = useMemo(
     () =>
-      available
-        .filter((p) => p.deadlineMonthsFromBirth !== null)
-        .map((p) => {
-          const done = todos.some((t) => t.todoId === p.id && t.status === 'done')
-          const deadline = addMonths(child.birthDate, p.deadlineMonthsFromBirth!)
-          return { policy: p, done, deadline, remain: daysUntil(deadline) }
-        })
-        .sort((a, b) => Number(a.done) - Number(b.done) || a.remain - b.remain),
-    [available, todos, child.birthDate],
+      child
+        ? available
+            .filter((p) => p.deadlineMonthsFromBirth !== null)
+            .map((p) => {
+              const done = todos.some((t) => t.todoId === p.id && t.status === 'done')
+              const deadline = addMonths(child.birthDate, p.deadlineMonthsFromBirth!)
+              return { policy: p, done, deadline, remain: daysUntil(deadline) }
+            })
+            .sort((a, b) => Number(a.done) - Number(b.done) || a.remain - b.remain)
+        : [],
+    [available, todos, child],
   )
+
+  if (!child) return null
 
   const filtered = cat === 'all' ? available : available.filter((p) => p.category === cat)
 

@@ -1,3 +1,6 @@
 node_modules
 .workbuddy
 .DS_Store
+
+# 由 scripts/sync-content.mjs 从 src/content/ 生成，属于构建产物
+public/content

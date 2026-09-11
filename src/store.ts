@@ -6,10 +6,13 @@ import type {
   GrowthRecord,
   GrowthType,
   MilestoneCheck,
+  PolicyDef,
   TodoState,
   VaccineRecord,
 } from './types'
 import { repository } from './lib/repo'
+import { loadContent } from './lib/content'
+import { POLICIES } from './data/policies'
 
 function uid(): string {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 7)
@@ -21,6 +24,10 @@ interface AppState {
   growthRecords: GrowthRecord[]
   milestoneChecks: MilestoneCheck[]
   todos: TodoState[]
+  /** 政策内容：启动时从 public/content/policies.json 拉取，失败时降级到内置数据 */
+  policies: PolicyDef[]
+  /** 当前生效的内容版本号，便于排查「用户看到的是哪一版内容」 */
+  contentVersion: string
   hydrated: boolean
 
   hydrate: () => Promise<void>
@@ -51,16 +58,21 @@ export const useApp = create<AppState>((set, get) => ({
   growthRecords: [],
   milestoneChecks: [],
   todos: [],
+  policies: POLICIES,
+  contentVersion: 'bundled',
   hydrated: false,
 
   hydrate: async () => {
-    const saved = await repository.load()
+    // 内容与用户数据并行加载；loadContent 自带降级，不会抛错
+    const [saved, content] = await Promise.all([repository.load(), loadContent()])
     set({
       child: saved?.child ?? null,
       vaccineRecords: saved?.vaccineRecords ?? [],
       growthRecords: saved?.growthRecords ?? [],
       milestoneChecks: saved?.milestoneChecks ?? [],
       todos: saved?.todos ?? [],
+      policies: content.policies,
+      contentVersion: content.version,
       hydrated: true,
     })
   },
