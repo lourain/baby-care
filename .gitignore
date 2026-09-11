@@ -4,3 +4,6 @@ node_modules
 
 # 由 scripts/sync-content.mjs 从 src/content/ 生成，属于构建产物
 public/content
+
+# 构建产物，由 CI 的 npm run build 生成后直接部署，不入库
+dist
