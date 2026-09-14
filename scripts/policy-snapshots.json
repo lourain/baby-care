@@ -3,7 +3,7 @@
   "snapshots": {
     "https://ybj.sh.gov.cn/ybdt/20250523/1f40cc2869bb437eb96cd858fe2dec22.html": {
       "hash": "427b7d5983152fb3",
-      "fetchedAt": "2026-09-11T01:48:53.308Z",
+      "fetchedAt": "2026-09-14T05:45:07.061Z",
       "policies": [
         "sh-newborn-yibao-free"
       ],
@@ -11,7 +11,7 @@
     },
     "https://www.redcross-sha.org.cn/view.aspx?id=21903&cid=19&sid=89": {
       "hash": "4204c351ea7684fc",
-      "fetchedAt": "2026-09-11T01:48:54.086Z",
+      "fetchedAt": "2026-09-14T05:45:14.294Z",
       "policies": [
         "sh-shaoer-huzhu"
       ],
@@ -27,7 +27,7 @@
     },
     "https://fegw.sh.gov.cn/ywxx/20250818/bb0e8156a8814e608ef2724dceff356b.html": {
       "hash": "c370c7fdf8dcf53f",
-      "fetchedAt": "2026-09-11T01:48:54.703Z",
+      "fetchedAt": "2026-09-14T05:45:16.073Z",
       "policies": [
         "sh-kindergarten-fee",
         "sh-maternity-allowance"
