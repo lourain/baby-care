@@ -3,7 +3,7 @@
   "snapshots": {
     "https://ybj.sh.gov.cn/ybdt/20250523/1f40cc2869bb437eb96cd858fe2dec22.html": {
       "hash": "427b7d5983152fb3",
-      "fetchedAt": "2026-09-14T05:45:07.061Z",
+      "fetchedAt": "2026-09-21T05:52:00.576Z",
       "policies": [
         "sh-newborn-yibao-free"
       ],
@@ -11,7 +11,7 @@
     },
     "https://www.redcross-sha.org.cn/view.aspx?id=21903&cid=19&sid=89": {
       "hash": "4204c351ea7684fc",
-      "fetchedAt": "2026-09-14T05:45:14.294Z",
+      "fetchedAt": "2026-09-21T05:52:03.757Z",
       "policies": [
         "sh-shaoer-huzhu"
       ],
